@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Quest</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#07070b;color:white;font-family:Arial,sans-serif;overflow:hidden}
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px}
+.box{width:100%;max-width:600px}
+.small{font-size:11px;letter-spacing:4px;color:#777}
+h1{font-family:Georgia,serif;font-size:70px;font-weight:400}
+h2{font-family:Georgia,serif;font-size:38px}
+p{color:#aaa;line-height:1.7}
+button{background:white;color:black;border:none;padding:15px 25px;border-radius:30px;cursor:pointer;font-weight:bold}
+.hidden{display:none!important}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:30px}
+.card{padding:30px 10px;border:1px solid #ffffff20;border-radius:15px;background:#ffffff08;cursor:pointer;font-size:30px}
+.card span{display:block;font-size:12px;color:#888;margin-top:10px}
+.memory-photo{width:100%;max-width:330px;height:380px;object-fit:cover;border-radius:18px;margin:20px auto;display:block}
+.memory-message{font-family:Georgia,serif;font-size:20px;color:#ddd;line-height:1.6}
+.memory-box{animation:reveal .7s ease}
+@keyframes reveal{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.secret{border:1px solid #ffffff20;border-radius:18px;padding:20px;margin:25px 0;background:#ffffff08;text-align:left}
+.secret b{color:white}
+.final-box{animation:finalReveal 1.5s ease}
+.final-symbol{font-size:35px;margin:20px;animation:glow 2s infinite alternate}
+#final h1{margin-bottom:5px}
+#final h2{margin-top:0;font-size:32px}
+.final-text{max-width:520px;margin:22px auto;font-size:16px}
+.final-line{width:80px;height:1px;background:#ffffff55;margin:35px auto 20px}
+.signature{color:#777;font-size:13px}
+@keyframes finalReveal{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{from{opacity:.4;transform:scale(.9)}to{opacity:1;transform:scale(1.1)}}
+.intro{animation:introAppear 2s ease}
+.time{font-size:14px;letter-spacing:4px;color:#aaa;margin-bottom:25px}
+.intro-line{width:60px;height:1px;background:#ffffff55;margin:0 auto 25px}
+.system{font-size:12px;letter-spacing:4px;color:#777}
+.intro h1{font-size:52px;margin:15px 0}
+.typing{color:#aaa;font-family:Georgia,serif;font-size:18px;min-height:30px}
+@keyframes introAppear{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<section id="start" class="screen">
+<div class="box intro">
+<div class="time">12:00 AM</div>
+<div class="intro-line"></div>
+<div class="system">SYSTEM ONLINE</div>
+<h1>Birthday<br>Quest</h1>
+<p class="typing" id="introText">A special mission has been assigned to you...</p>
+<button type="button" onclick="startGame()">START MISSION →</button>
+</div>
+</section>
+
+<section id="level1" class="screen hidden">
+<div class="box">
+<div class="small">LEVEL 01</div>
+<h2>Find the birthday girl.</h2>
+<p>There is only one correct answer.</p>
+<div class="cards">
+<div class="card" onclick="wrong()">🌙<span>The Moon</span></div>
+<div class="card" onclick="wrong()">🌸<span>The Flower</span></div>
+<div class="card" onclick="level2()">✨<span>HER</span></div>
+<div class="card" onclick="wrong()">🎁<span>The Gift</span></div>
+</div>
+<p id="wrong"></p>
+</div>
+</section>
+
+<section id="level2" class="screen hidden">
+<div class="box">
+<div class="small">LEVEL 02</div>
+<h2>Memory Hunt</h2>
+<p>Three memories are hidden here.<br>Find them all.</p>
+<div class="cards">
+<div class="card" onclick="memoryFound(1)">📷<span>Memory #01</span></div>
+<div class="card" onclick="memoryFound(2)">🎧<span>Memory #02</span></div>
+<div class="card" onclick="memoryFound(3)">🌙<span>Memory #03</span></div>
+</div>
+<div id="memoryReveal"></div>
+<p id="memoryStatus">0 / 3 memories found</p>
+</div>
+</section>
+
+<section id="level3" class="screen hidden">
+<div class="box">
+<div class="small">SECRET FILE UNLOCKED</div>
+<h2>Subject: YOU</h2>
+<div class="secret">
+<p><b>Status:</b> Birthday mode activated</p>
+<p><b>Known for:</b> Making ordinary moments memorable.</p>
+<p><b>Mission:</b> Make you smile today.</p>
+<p><b>Warning:</b> Today is officially your day baccha.</p>
+</div>
+<button type="button" onclick="finalMessage()">OPEN FINAL MESSAGE →</button>
+</div>
+</section>
+
+<section id="final" class="screen hidden">
+<div class="box final-box">
+<div class="small">MISSION COMPLETE</div>
+<div class="final-symbol">✦</div>
+<h1>Happy Birthday 🤍</h1>
+<h2>KASHISH BACCHA 🤍</h2>
+<p class="final-text">I hope this year brings you beautiful moments, unexpected reasons to smile, and memories you'll want to keep forever.</p>
+<p class="final-text">You deserve a day that feels a little different. So instead of just saying "Happy Birthday"... I made you a little journey to get here.</p>
+<div class="final-line"></div>
+<p class="signature">Made especially for you ✨</p>
+</div>
+</section>
+
+<script>
+function startGame(){
+ const start=document.getElementById('start');
+ const level1=document.getElementById('level1');
+ start.classList.add('hidden');
+ level1.classList.remove('hidden');
+}
+function wrong(){document.getElementById('wrong').innerText='Nope 😌 Try again.';}
+function level2(){
+ document.getElementById('level1').classList.add('hidden');
+ document.getElementById('level2').classList.remove('hidden');
+}
+let memories=0;
+const foundMemories=new Set();
+function memoryFound(number){
+ if(foundMemories.has(number))return;
+ foundMemories.add(number);memories++;
+ const messages={1:'Some moments are simply worth remembering. 🤍',2:'Some memories can make you smile without even trying.',3:'And somehow, this one feels a little more special.'};
+ const photos={1:'images/memory1.jpg',2:'images/memory2.jpg',3:'images/memory3.jpg'};
+ document.getElementById('memoryReveal').innerHTML=`<div class="memory-box"><img src="${photos[number]}" class="memory-photo" alt="Memory ${number}"><div class="memory-message">${messages[number]}</div></div>`;
+ document.getElementById('memoryStatus').innerText=memories+' / 3 memories found';
+ if(memories===3){setTimeout(function(){document.getElementById('level2').classList.add('hidden');document.getElementById('level3').classList.remove('hidden');},1800);}
+}
+function finalMessage(){
+ document.querySelectorAll('.screen').forEach(function(screen){screen.classList.add('hidden');});
+ document.getElementById('final').classList.remove('hidden');
+}
+const introText='A special mission has been assigned to you...';
+let i=0;
+function typeIntro(){
+ const element=document.getElementById('introText');
+ if(!element)return;
+ if(i<introText.length){element.innerText=introText.substring(0,i+1);i++;setTimeout(typeIntro,45);}
+}
+window.addEventListener('DOMContentLoaded',typeIntro);
+</script>
+</body>
+</html>
